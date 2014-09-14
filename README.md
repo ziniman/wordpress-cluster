@@ -4,13 +4,13 @@ This is a demo Wordpress installation for the IBM Bluemix PaaS.
 
 Preparations
 ================
-Make sure you have an account on Bluemix (https://bluemix.net)a and login to your account
+Make sure you have an account on Bluemix (https://bluemix.net) and login to your account
 	
-	cf login -a https://api.ng.bluemix.net
+	$cf login -a https://api.ng.bluemix.net
 
 This app requires a MySQL DB. In this demo I use ClearDB
 
-	cf create-service cleardb WPDB
+	$cf create-service cleardb WPDB
 
 
 Installation
@@ -24,5 +24,8 @@ Go the app folder
 
 	$ cd wordpress-bluemix
 	
-	
-DONE! Go to your Bluemix app (<appname>.mybluemix.net) and enjoy Wordpress. 
+Push the app to Bluemix using the custom Zend Server Buildpack	
+
+	$ cf push &lt;appname&gt; -m 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
+
+DONE! Go to your Bluemix app (&lt;appname&gt;.mybluemix.net) and enjoy Wordpress. 
