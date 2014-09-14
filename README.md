@@ -6,11 +6,11 @@ Preparations
 ================
 Make sure you have an account on Bluemix (https://bluemix.net) and login to your account
 	
-	$cf login -a https://api.ng.bluemix.net
+	$ cf login -a https://api.ng.bluemix.net
 
 This app requires a MySQL DB. In this demo I use ClearDB
 
-	$cf create-service cleardb WPDB
+	$ cf create-service cleardb spark WPDB
 
 
 Installation
@@ -24,9 +24,9 @@ Go the app folder
 
 	$ cd wordpress-bluemix
 	
-Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet)	
+Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet) **TEMP LOCATION**	
 
-	$ cf push <appname> --no-start 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
+	$ cf push <appname> --no-start -m 512M -b https://github.com/ziniman/Zend-Server-7-0-Bluemix.git
 
 Bind the ClearDB service to your app
 
