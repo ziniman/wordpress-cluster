@@ -24,8 +24,16 @@ Go the app folder
 
 	$ cd wordpress-bluemix
 	
-Push the app to Bluemix using the custom Zend Server Buildpack	
+Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet)	
 
-	$ cf push &lt;appname&gt; -m 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
+	$ cf push <appname> --no-start 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
+
+Bind the ClearDB service to your app
+
+	$ cf bind-service <appname> WPDB
+
+Start the wordpress app 
+
+	$ cf start <appname>
 
 DONE! Go to your Bluemix app (&lt;appname&gt;.mybluemix.net) and enjoy Wordpress. 
