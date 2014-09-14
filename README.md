@@ -2,13 +2,14 @@
 
 This is a demo Wordpress installation for the IBM Bluemix PaaS.
 
-Preperations
+Preparations
 ================
 Make sure you have an account on Bluemix (https://bluemix.net)a and login to your account
 	
 	cf login -a https://api.ng.bluemix.net
 
 This app requires a MySQL DB. In this demo I use ClearDB
+
 	cf create-service cleardb WPDB
 
 
