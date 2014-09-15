@@ -2,10 +2,10 @@
 
 This demo describes how to install a Wordpress application on the IBM Bluemix PaaS.
 
-Preparations
+## Preparations
 ================
 
-#1 Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
+Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
 
 	$ cf login -a https://api.ng.bluemix.net
 
@@ -13,40 +13,36 @@ This app requires a MySQL database. For this demo, I use ClearDB:
 
 	$ cf create-service cleardb spark WPDB
 
-Installation
+## Installation
 ================
 
-1. Clone the repository from Github:
+Clone the repository from Github:
 
 	$ git clone https://github.com/ziniman/wordpress-bluemix.git
 
-2. Go the app folder:
+Go the app folder:
 
 	$ cd wordpress-bluemix
 
-3. Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app 
-
-yet): ***TEMP LOCATION***
+Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet): ***TEMP LOCATION***
 
 	$ cf push <appname> --no-start -m 512M -b https://github.com/ziniman/Zend-Server-7-0-Bluemix.git
 
-4. Bind the ClearDB service to your app:
+Bind the ClearDB service to your app:
 
 	$ cf bind-service <appname> WPDB
 
-5. Start the wordpress app:
+Start the wordpress app:
 
 	$ cf start <appname>
 
-DONE! To start working with your Wordpress app on Bluemix, enter the following URL in a 
-
-browser: &lt;appname&gt;.mybluemix.net
+DONE! To start working with your Wordpress app on Bluemix, enter the following URL in a browser: &lt;appname&gt;.mybluemix.net
 
 
-Additional Setup
+## Additional Setup
 ================
 
-**Database Setup**
+### Database Setup
 
 To ensure your Wordpress app functions properly on Bluemix, you also need to configure the database credentials in the 'wp_config.php' file to use the VCAP_SERVICES environment variable to retrieve the database credentials from the system.
 
