@@ -3,7 +3,6 @@
 This demo describes how to install a Wordpress application on the IBM Bluemix PaaS.
 
 ## Preparations
-================
 
 Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
 
@@ -14,7 +13,6 @@ This app requires a MySQL database. For this demo, I use ClearDB:
 	$ cf create-service cleardb spark WPDB
 
 ## Installation
-================
 
 Clone the repository from Github:
 
@@ -40,9 +38,8 @@ DONE! To start working with your Wordpress app on Bluemix, enter the following U
 
 
 ## Additional Setup
-================
 
-### Database Setup
+#### Database Setup
 
 To ensure your Wordpress app functions properly on Bluemix, you also need to configure the database credentials in the 'wp_config.php' file to use the VCAP_SERVICES environment variable to retrieve the database credentials from the system.
 
