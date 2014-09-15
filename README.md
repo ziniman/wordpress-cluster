@@ -5,7 +5,7 @@ This demo describes how to install a Wordpress application on the IBM Bluemix Pa
 Preparations
 ================
 
-Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
+#1 Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
 
 	$ cf login -a https://api.ng.bluemix.net
 
