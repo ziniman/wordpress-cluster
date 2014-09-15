@@ -26,7 +26,7 @@ Installation
 
 3. Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app 
 
-yet): *TEMP LOCATION*
+yet): ***TEMP LOCATION***
 
 	$ cf push <appname> --no-start -m 512M -b https://github.com/ziniman/Zend-Server-7-0-Bluemix.git
 
@@ -40,7 +40,7 @@ yet): *TEMP LOCATION*
 
 DONE! To start working with your Wordpress app on Bluemix, enter the following URL in a 
 
-browser: <appname>:mybluemix.net
+browser: &lt;appname$gt;.mybluemix.net
 
 
 Additional Setup
