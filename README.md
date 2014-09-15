@@ -5,11 +5,11 @@ This demo describes how to install a Wordpress application on the IBM Bluemix Pa
 Preparations
 ================
 
-1. Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
+Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
 
 	$ cf login -a https://api.ng.bluemix.net
 
-2. This app requires a MySQL database. For this demo, I use ClearDB:
+This app requires a MySQL database. For this demo, I use ClearDB:
 
 	$ cf create-service cleardb spark WPDB
 
