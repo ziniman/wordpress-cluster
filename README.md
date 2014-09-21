@@ -78,5 +78,7 @@ Since I’m trying to avoid from storing specific content in wp-config.php and u
 	define( 'AWS_ACCESS_KEY_ID', getenv('AWS_ACCESS_KEY_ID') );
 	define( 'AWS_SECRET_ACCESS_KEY', getenv('AWS_SECRET_ACCESS_KEY') );
 
+To set your AWS credentials as an Environment Variables, run the next commands:
+
 	$ cf set-env bluemixwp AWS_ACCESS_KEY_ID <YOUR ACCESS KEY ID>
 	$ cf set-env bluemixwp AWS_SECRET_ACCESS_KEY <YOUR SECRET ACCESS KEY>
