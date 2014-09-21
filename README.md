@@ -62,3 +62,14 @@ To extract the information in PHP, add the next code to your 'wp_config.php' fil
 
 	/** MySQL hostname */
 	define('DB_HOST', $vcap_arr['credentials']['hostname']);
+
+#### AWS S3 plugin setup
+
+Since Bluemix, as all PaaS based on CloudFoundry, has an Ephemeral file system, files that are stores on the instnace by the user, will be deleted on every update of the code (with ‘cf push’) or restart of the application.
+
+Wordpress allows you to upload files, as part of posts editing and by default, will store the files on the local file system. This is not going to work in a PaaS setup and really not a great way to ensure system scaling in the future.
+
+To overcome this issue, I’ve added to this repository a Wordpress plugin that supports storing all uploaded media on (AWS’s S3|https://aws.amazon.com/s3) service.  
+
+	$ cf set-env bluemixwp AWS_ACCESS_KEY_ID <YOUR ACCESS KEY ID>
+	$ cf set-env bluemixwp AWS_SECRET_ACCESS_KEY <YOUR SECRET ACCESS KEY>
