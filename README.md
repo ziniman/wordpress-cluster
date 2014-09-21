@@ -69,7 +69,14 @@ Since Bluemix, as all PaaS based on CloudFoundry, has an Ephemeral file system, 
 
 Wordpress allows you to upload files, as part of posts editing and by default, will store the files on the local file system. This is not going to work in a PaaS setup and really not a great way to ensure system scaling in the future.
 
-To overcome this issue, I’ve added to this repository a Wordpress plugin that supports storing all uploaded media on (AWS’s S3|https://aws.amazon.com/s3) service.  
+To overcome this issue, I’ve added to this repository a Wordpress plugin that supports storing all uploaded media on [AWS’s S3](https://aws.amazon.com/s3) service.  
+
+If you would like to use the service, you will have to create an access key on AWS and use it in the plugin. The plugin supports storing the key both in the DB (not recommended) and in the wp-config.php file in your code base. 
+Since I’m trying to avoid from storing specific content in wp-config.php and use Environment Variables as much as I can, I’ve added the next lines to wp-config.php:
+
+	/**Define AWS access keys for S3 Plugin*/
+	define( 'AWS_ACCESS_KEY_ID', getenv('AWS_ACCESS_KEY_ID') );
+	define( 'AWS_SECRET_ACCESS_KEY', getenv('AWS_SECRET_ACCESS_KEY') );
 
 	$ cf set-env bluemixwp AWS_ACCESS_KEY_ID <YOUR ACCESS KEY ID>
 	$ cf set-env bluemixwp AWS_SECRET_ACCESS_KEY <YOUR SECRET ACCESS KEY>
