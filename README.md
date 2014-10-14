@@ -22,9 +22,9 @@ Go the app folder:
 
 	$ cd wordpress-bluemix
 
-Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet): ***TEMP LOCATION***
+Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet):
 
-	$ cf push <appname> --no-start -m 512M -b https://github.com/ziniman/Zend-Server-7-0-Bluemix.git
+	$ cf push <appname> --no-start -m 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
 
 Bind the ClearDB service to your app:
 
