@@ -7,7 +7,7 @@ This demo describes how to install a Wordpress application on a cluster running 
 Please make sure you follow the next steps before deploying your code:
 * Make sure you have an AWS account or create a new one.
 * Create an AWS Private Key 
-* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS. The list of version is available [here[(https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
+* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS. The list of version is available [here](https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
 * Generate a [CloudFormation template](http://www.zend.com/en/products/server/cloudformation) on Zend.com based on the AMI you would like to run.  
 
 ## Additional Setup
