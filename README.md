@@ -1,47 +1,20 @@
-# Wordpress-Bluemix
+# Wordpress-Cluster
 
-This demo describes how to install a Wordpress application on the IBM Bluemix PaaS.
+This demo describes how to install a Wordpress application on a cluster running on AWS, using Zend Server Marketplace AMI.
 
 ## Preparations
 
-Log into your Bluemix account (if you do not have one, create one at https://bluemix.net):
-
-	$ cf login -a https://api.ng.bluemix.net
-
-This app requires a MySQL database. For this demo, I use ClearDB:
-
-	$ cf create-service cleardb spark WPDB
-
-## Installation
-
-Clone the repository from Github:
-
-	$ git clone https://github.com/ziniman/wordpress-bluemix.git
-
-Go the app folder:
-
-	$ cd wordpress-bluemix
-
-Push the app to Bluemix using the custom Zend Server Buildpack (without starting the app yet):
-
-	$ cf push <appname> --no-start -m 512M -b https://github.com/zendtech/zend-server-php-buildpack-bluemix
-
-Bind the ClearDB service to your app:
-
-	$ cf bind-service <appname> WPDB
-
-Start the wordpress app:
-
-	$ cf start <appname>
-
-DONE! To start working with your Wordpress app on Bluemix, enter the following URL in a browser: &lt;appname&gt;.mybluemix.net
-
+Please make sure you follow the next steps before deploying your code:
+* Make sure you have an AWS account or create a new one.
+* Create an AWS Private Key 
+* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS. The list of version is available [here[(https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
+* Generate a [CloudFormation template](http://www.zend.com/en/products/server/cloudformation) on Zend.com based on the AMI you would like to run.  
 
 ## Additional Setup
 
 #### Database Setup
 
-To ensure your Wordpress app functions properly on Bluemix, you also need to configure the database credentials in the 'wp_config.php' file to use the VCAP_SERVICES environment variable to retrieve the database credentials from the system.
+To ensure your Wordpress app functions properly on AWS, you also need to configure the database credentials in the 'wp_config.php' file to use the VCAP_SERVICES environment variable to retrieve the database credentials from the system.
 
 Bluemix, as with all CloudFoundry-based systems, stores all the information about the different services attached to the application in this environment variable, which make these variables available to all applications.
 
@@ -65,9 +38,7 @@ To extract the information in PHP, add the next code to your 'wp_config.php' fil
 
 #### AWS S3 plugin setup
 
-Since Bluemix, as all PaaS based on CloudFoundry, has an Ephemeral file system, files that are stores on the instnace by the user, will be deleted on every update of the code (with ‘cf push’) or restart of the application.
-
-Wordpress allows you to upload files, as part of posts editing and by default, will store the files on the local file system. This is not going to work in a PaaS setup and really not a great way to ensure system scaling in the future.
+Wordpress allows you to upload files, as part of posts editing and by default, will store the files on the local file system. This is not going to work in a cluster setup and really not a great way to ensure system scaling in the future. We need to store this the of content in a location available to all cluster members. 
 
 To overcome this issue, I’ve added to this repository a Wordpress plugin that supports storing all uploaded media on [AWS’s S3](https://aws.amazon.com/s3) service.  
 
@@ -80,5 +51,4 @@ Since I’m trying to avoid from storing specific content in wp-config.php and u
 
 To set your AWS credentials as an Environment Variables, run the next commands:
 
-	$ cf set-env bluemixwp AWS_ACCESS_KEY_ID <YOUR ACCESS KEY ID>
-	$ cf set-env bluemixwp AWS_SECRET_ACCESS_KEY <YOUR SECRET ACCESS KEY>
+#TBD#
