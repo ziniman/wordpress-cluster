@@ -1,0 +1,19 @@
+*.pydevproject
+.metadata
+.gradle
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+*.launch
+
+# PDT-specific
+.buildpath
+/.project
