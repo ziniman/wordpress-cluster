@@ -31,3 +31,6 @@
 $uploadPath = getenv('ZS_APPLICATION_BASE_DIR') . "/wp-content/uploads";
 $cmd = 'chmod -R 777 ' . $uploadPath;
 shell_exec($cmd);
+
+$target = getenv('ZS_TARGET');
+file_put_contents(getenv('ZS_APPLICATION_BASE_DIR') . "/.htaccess", "SetEnv TARGET $target", FILE_APPEND);
