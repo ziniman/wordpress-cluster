@@ -28,9 +28,10 @@
  * - ZS_<PARAMNAME> - will contain value of parameter defined in deployment.xml, as specified by
  *   user during deployment.
  */  
-$uploadPath = getenv('ZS_APPLICATION_BASE_DIR') . "/wp-content/uploads";
+$basePath = getenv('ZS_APPLICATION_BASE_DIR');
+$uploadPath = $basePath . "/wp-content/uploads";
 $cmd = 'chmod -R 777 ' . $uploadPath;
 shell_exec($cmd);
 
 $target = getenv('ZS_TARGET');
-file_put_contents(getenv('ZS_APPLICATION_BASE_DIR') . "/.htaccess", "SetEnv TARGET $target", FILE_APPEND);
+file_put_contents($basePath. "/.htaccess", "SetEnv TARGET $target", FILE_APPEND);
