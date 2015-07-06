@@ -7,7 +7,7 @@ This demo describes how to install a Wordpress application on a cluster running 
 Please make sure you follow the next steps before deploying your code:
 * Make sure you have an AWS account or create a new one.
 * Create an AWS Private Key 
-* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS. The list of version is available [here](https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
+* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS). The list of version is available [here](https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
 * Generate a [CloudFormation template](http://www.zend.com/en/products/server/cloudformation) on Zend.com based on the AMI you would like to run.  
 
 ## Generate a ZPK (Zend Server Package) Deployment file
@@ -37,3 +37,4 @@ For this to work, I had to add the next lines to wp-config.php:
 	/**Define AWS access keys for S3 Plugin*/
 	define( 'AWS_ACCESS_KEY_ID', 'MY_AWS_ACCESS_KEY_ID');
 	define( 'AWS_SECRET_ACCESS_KEY', 'MY_AWS_SECRET_ACCESS_KEY');
+The plugin (amazon-s3-and-cloudfront) is included in this repository.
