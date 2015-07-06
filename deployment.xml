@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <package xmlns="http://www.zend.com/server/deployment-descriptor/1.0" version="1.0">
     <name>wordpress-cluster</name>
-    <description>Updating Readme</description>
+    <description>Final OpenShift Location</description>
     <version>
-        <release>1.2.1</release>
+        <release>1.4.4</release>
     </version>
     <appdir>data</appdir>
     <scriptsdir>scripts</scriptsdir>
+    <dependencies>
+    <required>
+      <php>
+        <min>5.3</min>
+        </php>
+    </required>
+  </dependencies>
     <parameters>
     <parameter display="Application Environment" id="TARGET" readonly="false" required="true" type="choice">
       <validation>
         <enums>
           <enum>Development</enum>
-          <enum>Production</enum>
+          <enum>Production-AWS</enum>
+          <enum>Production-Azure</enum>
+          <enum>Production-OpenShift</enum>
         </enums>
       </validation>
-      <defaultvalue>Development</defaultvalue> 
       <description>Select deployment target</description>
     </parameter>
     </parameters>

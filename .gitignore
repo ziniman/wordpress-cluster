@@ -13,6 +13,7 @@ local.properties
 .externalToolBuilders/
 
 *.launch
+*.DS_Store
 
 # PDT-specific
 .buildpath
