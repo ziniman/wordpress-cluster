@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <package xmlns="http://www.zend.com/server/deployment-descriptor/1.0" version="1.0">
     <name>wordpress-cluster</name>
-    <description>Final OpenShift Location</description>
+    <description>New AWS Demo</description>
     <version>
-        <release>1.4.4</release>
+        <release>2</release>
     </version>
     <appdir>data</appdir>
     <scriptsdir>scripts</scriptsdir>
@@ -22,6 +22,7 @@
           <enum>Production-AWS</enum>
           <enum>Production-Azure</enum>
           <enum>Production-OpenShift</enum>
+          <enum>Production-GCP</enum>
         </enums>
       </validation>
       <description>Select deployment target</description>
