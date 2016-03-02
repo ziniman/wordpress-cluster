@@ -1,6 +1,7 @@
 *.pydevproject
 .metadata
 .gradle
+.DS_Store
 *.tmp
 *.bak
 *.swp

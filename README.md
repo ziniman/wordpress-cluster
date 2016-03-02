@@ -55,9 +55,13 @@ For Ubuntu Linux use
 sudo apt-get install nfs-common
 (You might need to run a system update before being able to install NFS tools)
 * Create a folder on each server for the mount point. In my example I use:
+
 	sudo mkdir \mnt\efs
+	
 * Mount the EFS to this folder
+
 	sudo mount -t nfs4 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-0ca44fa5.efs.us-west-2.amazonaws.com:/ /mnt/efs
+	
 * Create /mnt/efs/wp/uploads folder and assign write permission to this folder so the web server user can write into it.
 
 When the mount point is set, all you need to do is check the ‘Turn on EFS support’ during the deployment process and the post_stage script will link your wp-content/uploads folder to /mnt/efs/wp/uploads and share all uploads across the entire cluster.
