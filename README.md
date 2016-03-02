@@ -38,3 +38,27 @@ For this to work, I had to add the next lines to wp-config.php:
 	define( 'AWS_ACCESS_KEY_ID', 'MY_AWS_ACCESS_KEY_ID');
 	define( 'AWS_SECRET_ACCESS_KEY', 'MY_AWS_SECRET_ACCESS_KEY');
 The plugin (amazon-s3-and-cloudfront) is included in this repository.
+
+#### EFS Support (Experimental) 
+
+AWS are working on a new service called EFS – Elastic File System. This will allow you to get access to NFS as a service and share virtual storage across instances.
+
+For Clustered WordPress deployments, this can replace all the file sync methods used today, including the one using S3 described above.
+
+To use EFS you will need:
+* Access to the EFS service (still in closed preview for now)
+* Define a new EFS file system in the AWS Console
+* Install NFS support on all your instances (please take into account that this won’t work in scale up scenario for new instances. This needs to be solved in the future)
+For RedHat based Linux use
+sudo yum install -y nfs-utils
+For Ubuntu Linux use
+sudo apt-get install nfs-common
+(You might need to run a system update before being able to install NFS tools)
+* Create a folder on each server for the mount point. In my example I use:
+	sudo mkdir \mnt\efs
+* Mount the EFS to this folder
+	sudo mount -t nfs4 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-0ca44fa5.efs.us-west-2.amazonaws.com:/ /mnt/efs
+* Create /mnt/efs/wp/uploads folder and assign write permission to this folder so the web server user can write into it.
+
+When the mount point is set, all you need to do is check the ‘Turn on EFS support’ during the deployment process and the post_stage script will link your wp-content/uploads folder to /mnt/efs/wp/uploads and share all uploads across the entire cluster.
+ 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <package xmlns="http://www.zend.com/server/deployment-descriptor/1.0" version="1.0">
     <name>wordpress-cluster</name>
-    <description>New WordPress version 4.3.1</description>
+    <description>Adding EFS Support</description>
     <version>
-        <release>2.1</release>
+        <release>3.0</release>
     </version>
     <appdir>data</appdir>
     <scriptsdir>scripts</scriptsdir>
@@ -26,6 +26,10 @@
         </enums>
       </validation>
       <description>Select deployment target</description>
+    </parameter>
+    <parameter display="Turn on EFS Support" id="EFS_ON" readonly="false" required="false" type="checkbox">
+      <defaultvalue>0</defaultvalue>
+      <description>In case you use EFS, trun on EFS support to link uplodas folder to /mnt/efs</description>
     </parameter>
     </parameters>
     <persistentresources>

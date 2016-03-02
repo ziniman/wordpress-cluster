@@ -29,8 +29,13 @@
  *   user during deployment.
  */  
 $basePath = getenv('ZS_APPLICATION_BASE_DIR');
+$isEFS = getenv('ZS_EFS_ON');
 $uploadPath = $basePath . "/wp-content/uploads";
-$cmd = 'chmod -R 777 ' . $uploadPath;
+if ($isEFS){
+    $cmd = "ln -sf /mnt/efs/wp/uploads " . $uploadPath;
+}
+else $cmd = 'chmod -R 777 ' . $uploadPath;
+
 shell_exec($cmd);
 
 $target = getenv('ZS_TARGET');
