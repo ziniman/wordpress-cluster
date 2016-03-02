@@ -5,10 +5,10 @@ This demo describes how to install a Wordpress application on a cluster running 
 ## Preparations
 
 Please make sure you follow the next steps before deploying your code:
-* Make sure you have an AWS account or create a new one.
-* Create an AWS Private Key 
-* Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS). The list of version is available [here](https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
-* Generate a [CloudFormation template](http://www.zend.com/en/products/server/cloudformation) on Zend.com based on the AMI you would like to run.  
+- Make sure you have an AWS account or create a new one.
+- Create an AWS Private Key 
+- Register to the Zend Server AMI your would like to use (based on your PHP version, Zend Server Edition and OS). The list of version is available [here](https://aws.amazon.com/marketplace/seller-profile/ref=dtl_pcp_sold_by?ie=UTF8&id=be5eed04-c761-4e81-b278-dca2d20b8482).
+- Generate a [CloudFormation template](http://www.zend.com/en/products/server/cloudformation) on Zend.com based on the AMI you would like to run.  
 
 ## Generate a ZPK (Zend Server Package) Deployment file
 
@@ -47,23 +47,23 @@ AWS are working on a new service called EFS – Elastic File System. This will a
 For Clustered WordPress deployments, this can replace all the file sync methods used today, including the one using S3 described above.
 
 To use EFS you will need:
-* Access to the EFS service (still in closed preview for now)
-* Define a new EFS file system in the AWS Console
-* Install NFS support on all your instances (please take into account that this won’t work in scale up scenario for new instances. This needs to be solved in the future)
+- Access to the EFS service (still in closed preview for now)
+- Define a new EFS file system in the AWS Console
+- Install NFS support on all your instances (please take into account that this won’t work in scale up scenario for new instances. This needs to be solved in the future)
 For RedHat based Linux use
 sudo yum install -y nfs-utils
 For Ubuntu Linux use
 sudo apt-get install nfs-common
 (You might need to run a system update before being able to install NFS tools)
-* Create a folder on each server for the mount point. In my example I use:
+- Create a folder on each server for the mount point. In my example I use:
 ```
 sudo mkdir \mnt\efs
 ```
-* Mount the EFS to this folder
+- Mount the EFS to this folder
 ```
 sudo mount -t nfs4 $(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone).fs-0ca44fa5.efs.us-west-2.amazonaws.com:/ /mnt/efs
 ```
-* Create `/mnt/efs/wp/uploads` folder and assign write permission to this folder so the web server user can write into it.
+- Create `/mnt/efs/wp/uploads` folder and assign write permission to this folder so the web server user can write into it.
 
 When the mount point is set, all you need to do is check the ‘Turn on EFS support’ during the deployment process and the post_stage script will link your `wp-content/uploads` folder to `/mnt/efs/wp/uploads` and share all uploads across the entire cluster.
  
