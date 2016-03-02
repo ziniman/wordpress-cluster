@@ -33,10 +33,11 @@ To overcome this issue, I’ve added to this repository a Wordpress plugin that 
 
 If you would like to use the service, you will have to create an access key on AWS and use it in the plugin. The plugin supports storing the key both in the DB (not recommended) and in the wp-config.php file in your code base. 
 For this to work, I had to add the next lines to wp-config.php:
-
-	/**Define AWS access keys for S3 Plugin*/
-	define( 'AWS_ACCESS_KEY_ID', 'MY_AWS_ACCESS_KEY_ID');
-	define( 'AWS_SECRET_ACCESS_KEY', 'MY_AWS_SECRET_ACCESS_KEY');
+```
+/**Define AWS access keys for S3 Plugin*/
+define( 'AWS_ACCESS_KEY_ID', 'MY_AWS_ACCESS_KEY_ID');
+define( 'AWS_SECRET_ACCESS_KEY', 'MY_AWS_SECRET_ACCESS_KEY');
+```
 The plugin (amazon-s3-and-cloudfront) is included in this repository.
 
 #### EFS Support (Experimental) 
