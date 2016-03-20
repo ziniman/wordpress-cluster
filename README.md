@@ -38,7 +38,7 @@ For this to work, I had to add the next lines to wp-config.php:
 define( 'AWS_ACCESS_KEY_ID', 'MY_AWS_ACCESS_KEY_ID');
 define( 'AWS_SECRET_ACCESS_KEY', 'MY_AWS_SECRET_ACCESS_KEY');
 ```
-The plugin (amazon-s3-and-cloudfront) is included in this repository.
+The plugin (WP Offload S3 Lite) is included in this repository.
 
 #### EFS Support (Experimental) 
 

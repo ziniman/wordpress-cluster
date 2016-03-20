@@ -34,7 +34,9 @@ $uploadPath = $basePath . "/wp-content/uploads";
 if ($isEFS){
     $cmd = "ln -sf /mnt/efs/wp/uploads " . $uploadPath;
 }
-else $cmd = 'chmod -R 777 ' . $uploadPath;
+else {
+    $cmd = 'mkdir ' . $uploadPath . ';chmod -R 777 ' . $uploadPath;
+}
 
 shell_exec($cmd);
 
