@@ -51,9 +51,13 @@ To use EFS you will need:
 - Define a new EFS file system in the AWS Console
 - Install NFS support on all your instances (please take into account that this won’t work in scale up scenario for new instances. This needs to be solved in the future)
 For RedHat based Linux use
+```
 sudo yum install -y nfs-utils
+```
 For Ubuntu Linux use
+```
 sudo apt-get install nfs-common
+```
 (You might need to run a system update before being able to install NFS tools)
 - Create a folder on each server for the mount point. In my example I use:
 ```
