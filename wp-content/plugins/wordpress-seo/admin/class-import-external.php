@@ -4,9 +4,9 @@
  */
 
 /**
- * class WPSEO_Import_External
+ * Class WPSEO_Import_External
  *
- * Class with functionality to import WP SEO settings from other plugins
+ * Class with functionality to import Yoast SEO settings from other plugins
  */
 class WPSEO_Import_External {
 
@@ -25,9 +25,9 @@ class WPSEO_Import_External {
 	public $msg = '';
 
 	/**
-	 * Class constructor
+	 * Import class constructor.
 	 *
-	 * @param boolean $replace
+	 * @param boolean $replace Boolean replace switch.
 	 */
 	public function __construct( $replace = false ) {
 		$this->replace = $replace;
@@ -38,7 +38,7 @@ class WPSEO_Import_External {
 	/**
 	 * Convenience function to set import message
 	 *
-	 * @param string $msg
+	 * @param string $msg Message string.
 	 */
 	protected function set_msg( $msg ) {
 		if ( ! empty( $this->msg ) ) {
@@ -50,7 +50,7 @@ class WPSEO_Import_External {
 	/**
 	 * Deletes an option depending on the class replace state
 	 *
-	 * @param string $option
+	 * @param string $option Option key.
 	 */
 	protected function perhaps_delete( $option ) {
 		if ( $this->replace ) {
@@ -67,12 +67,16 @@ class WPSEO_Import_External {
 		WPSEO_Meta::replace_meta( '_headspace_description', WPSEO_Meta::$meta_prefix . 'metadesc', $this->replace );
 		WPSEO_Meta::replace_meta( '_headspace_keywords', WPSEO_Meta::$meta_prefix . 'metakeywords', $this->replace );
 		WPSEO_Meta::replace_meta( '_headspace_page_title', WPSEO_Meta::$meta_prefix . 'title', $this->replace );
-		/* @todo [JRF => whomever] verify how headspace sets these metas ( 'noindex', 'nofollow', 'noarchive', 'noodp', 'noydir' )
-		 * and if the values saved are concurrent with the ones we use (i.e. 0/1/2) */
+
+		/**
+		 * @todo [JRF => whomever] verify how headspace sets these metas ( 'noindex', 'nofollow', 'noarchive', 'noodp', 'noydir' )
+		 * and if the values saved are concurrent with the ones we use (i.e. 0/1/2)
+		 */
 		WPSEO_Meta::replace_meta( '_headspace_noindex', WPSEO_Meta::$meta_prefix . 'meta-robots-noindex', $this->replace );
 		WPSEO_Meta::replace_meta( '_headspace_nofollow', WPSEO_Meta::$meta_prefix . 'meta-robots-nofollow', $this->replace );
 
-		/* @todo - [JRF => whomever] check if this can be done more efficiently by querying only the meta table
+		/*
+		 * @todo - [JRF => whomever] check if this can be done more efficiently by querying only the meta table
 		 * possibly directly changing it using concat on the existing values
 		 */
 		$posts = $wpdb->get_results( "SELECT ID FROM $wpdb->posts" );
@@ -86,15 +90,13 @@ class WPSEO_Import_External {
 				if ( isset( $custom['_headspace_noodp'] ) ) {
 					$robotsmeta_adv .= 'noodp,';
 				}
-				if ( isset( $custom['_headspace_noydir'] ) ) {
-					$robotsmeta_adv .= 'noydir';
-				}
 				$robotsmeta_adv = preg_replace( '`,$`', '', $robotsmeta_adv );
 				WPSEO_Meta::set_value( 'meta-robots-adv', $robotsmeta_adv, $post->ID );
 			}
 		}
 
 		if ( $this->replace ) {
+			// We no longer use noydir, but we remove the meta key as it's unneeded.
 			$hs_meta = array( 'noarchive', 'noodp', 'noydir' );
 			foreach ( $hs_meta as $meta ) {
 				delete_post_meta_by_key( '_headspace_' . $meta );
@@ -119,7 +121,7 @@ class WPSEO_Import_External {
 		}
 		if ( is_array( $posts ) && $posts !== array() ) {
 			foreach ( $posts as $post ) {
-				// sync all possible settings
+				// Sync all possible settings.
 				if ( $post->robotsmeta ) {
 					$pieces = explode( ',', $post->robotsmeta );
 					foreach ( $pieces as $meta ) {

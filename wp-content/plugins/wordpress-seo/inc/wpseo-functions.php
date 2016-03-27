@@ -23,17 +23,6 @@ if ( ! function_exists( 'yoast_breadcrumb' ) ) {
 	/**
 	 * Template tag for breadcrumbs.
 	 *
-	 * @todo [JRF => Yoast/whomever] We could probably get rid of the 'breadcrumbs-enable' option key
-	 * as the file is now only loaded when the template tag is encountered anyway.
-	 * Only issue with that would be the removal of the bbPress crumb from within wpseo_frontend_init()
-	 * in wpseo.php which is also based on this setting.
-	 * Whether or not to show the bctitle field within meta boxes is also based on this setting, but
-	 * showing these when someone hasn't implemented the template tag shouldn't really give cause for concern.
-	 * Other than that, leaving the setting is an easy way to enable/disable the bc without having to
-	 * edit the template files again, but having to manually enable when you've added the template tag
-	 * in your theme is kind of double, so I'm undecided about what to do.
-	 * I guess I'm leaning towards removing the option key.
-	 *
 	 * @param string $before  What to show before the breadcrumb.
 	 * @param string $after   What to show after the breadcrumb.
 	 * @param bool   $display Whether to display the breadcrumb (true) or return it (false).
@@ -41,9 +30,13 @@ if ( ! function_exists( 'yoast_breadcrumb' ) ) {
 	 * @return string
 	 */
 	function yoast_breadcrumb( $before = '', $after = '', $display = true ) {
-		$options = get_option( 'wpseo_internallinks' );
+		$breadcrumbs_enabled = current_theme_supports( 'yoast-seo-breadcrumbs' );
+		if ( ! $breadcrumbs_enabled ) {
+			$options             = get_option( 'wpseo_internallinks' );
+			$breadcrumbs_enabled = ( $options['breadcrumbs-enable'] === true );
+		}
 
-		if ( $options['breadcrumbs-enable'] === true ) {
+		if ( $breadcrumbs_enabled ) {
 			return WPSEO_Breadcrumbs::breadcrumb( $before, $after, $display );
 		}
 	}
@@ -142,12 +135,12 @@ function wpseo_replace_vars( $string, $args, $omit = array() ) {
  * @since 1.5.4
  *
  * @param  string $var              The name of the variable to replace, i.e. '%%var%%'
- *                                  - the surrounding %% are optional, name can only contain [A-Za-z0-9_-]
+ *                                  - the surrounding %% are optional, name can only contain [A-Za-z0-9_-].
  * @param  mixed  $replace_function Function or method to call to retrieve the replacement value for the variable
  *                                  Uses the same format as add_filter/add_action function parameter and
- *                                  should *return* the replacement value. DON'T echo it!
- * @param  string $type             Type of variable: 'basic' or 'advanced', defaults to 'advanced'
- * @param  string $help_text        Help text to be added to the help tab for this variable
+ *                                  should *return* the replacement value. DON'T echo it.
+ * @param  string $type             Type of variable: 'basic' or 'advanced', defaults to 'advanced'.
+ * @param  string $help_text        Help text to be added to the help tab for this variable.
  *
  * @return bool  Whether the replacement function was succesfully registered
  */
@@ -162,7 +155,7 @@ function wpseo_xml_redirect_sitemap() {
 	$current_url = ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == 'on' ) ? 'https://' : 'http://';
 	$current_url .= sanitize_text_field( $_SERVER['SERVER_NAME'] ) . sanitize_text_field( $_SERVER['REQUEST_URI'] );
 
-	// must be 'sitemap.xml' and must be 404
+	// Must be 'sitemap.xml' and must be 404.
 	if ( home_url( '/sitemap.xml' ) == $current_url && $GLOBALS['wp_query']->is_404 ) {
 		wp_redirect( home_url( '/sitemap_index.xml' ), 301 );
 		exit;
@@ -174,7 +167,7 @@ function wpseo_xml_redirect_sitemap() {
  *
  * @since 1.5.7
  *
- * @param string $page page to append to the base URL
+ * @param string $page page to append to the base URL.
  *
  * @return string base URL (incl page) for the sitemaps
  */
@@ -188,7 +181,8 @@ function wpseo_xml_sitemaps_base_url( $page ) {
 	 */
 	$base = apply_filters( 'wpseo_sitemaps_base_url', $base );
 
-	return home_url( $base . $page );
+	// Get the scheme from the configured home url instead of letting WordPress determine the scheme based on the requested URI.
+	return home_url( $base . $page, parse_url( get_option( 'home' ), PHP_URL_SCHEME ) );
 }
 
 /**
@@ -200,7 +194,7 @@ function wpseo_xml_sitemaps_init() {
 		return;
 	}
 
-	// redirects sitemap.xml to sitemap_index.xml
+	// Redirects sitemap.xml to sitemap_index.xml.
 	add_action( 'template_redirect', 'wpseo_xml_redirect_sitemap', 0 );
 
 	if ( ! is_object( $GLOBALS['wp'] ) ) {
@@ -220,10 +214,19 @@ add_action( 'init', 'wpseo_xml_sitemaps_init', 1 );
 /**
  * Notify search engines of the updated sitemap.
  *
- * @param string|null $sitemapurl
+ * @param string|null $sitemapurl Optional URL to make the ping for.
  */
 function wpseo_ping_search_engines( $sitemapurl = null ) {
-	// Don't ping if blog is not public
+	/**
+	 * Filter: 'wpseo_allow_xml_sitemap_ping' - Check if pinging is not allowed (allowed by default)
+	 *
+	 * @api boolean $allow_ping The boolean that is set to true by default.
+	 */
+	if ( apply_filters( 'wpseo_allow_xml_sitemap_ping', true ) === false ) {
+		return;
+	}
+
+	// Don't ping if blog is not public.
 	if ( '0' == get_option( 'blog_public' ) ) {
 		return;
 	}
@@ -232,35 +235,12 @@ function wpseo_ping_search_engines( $sitemapurl = null ) {
 		$sitemapurl = urlencode( wpseo_xml_sitemaps_base_url( 'sitemap_index.xml' ) );
 	}
 
-	// Ping Google and Bing
+	// Ping Google and Bing.
 	wp_remote_get( 'http://www.google.com/webmasters/tools/ping?sitemap=' . $sitemapurl, array( 'blocking' => false ) );
 	wp_remote_get( 'http://www.bing.com/ping?sitemap=' . $sitemapurl, array( 'blocking' => false ) );
 }
 
 add_action( 'wpseo_ping_search_engines', 'wpseo_ping_search_engines' );
-
-/**
- * Handles ajax request for tracking activation.
- */
-function wpseo_store_tracking_response() {
-	if ( ! wp_verify_nonce( $_POST['nonce'], 'wpseo_activate_tracking' ) ) {
-		die();
-	}
-
-	$options                        = get_option( 'wpseo' );
-	$options['tracking_popup_done'] = true;
-
-	if ( $_POST['allow_tracking'] == 'yes' ) {
-		$options['yoast_tracking'] = true;
-	}
-	else {
-		$options['yoast_tracking'] = false;
-	}
-
-	update_option( 'wpseo', $options );
-}
-
-add_action( 'wp_ajax_wpseo_allow_tracking', 'wpseo_store_tracking_response' );
 
 /**
  * WPML plugin support: Set titles for custom types / taxonomies as translatable.
@@ -269,7 +249,7 @@ add_action( 'wp_ajax_wpseo_allow_tracking', 'wpseo_store_tracking_response' );
  *
  * @global      $sitepress
  *
- * @param array $config
+ * @param array $config WPML configuration data to filter.
  *
  * @return array
  */
@@ -312,7 +292,7 @@ function wpseo_wpml_config( $config ) {
 add_filter( 'icl_wpml_config_array', 'wpseo_wpml_config' );
 
 /**
- * WordPress SEO breadcrumb shortcode
+ * Yoast SEO breadcrumb shortcode
  * [wpseo_breadcrumb]
  *
  * @return string
@@ -327,12 +307,12 @@ add_shortcode( 'wpseo_breadcrumb', 'wpseo_shortcode_yoast_breadcrumb' );
 /**
  * This invalidates our XML Sitemaps cache.
  *
- * @param string $type
+ * @param string $type Type of sitemap to invalidate.
  */
 function wpseo_invalidate_sitemap_cache( $type ) {
-	// Always delete the main index sitemaps cache, as that's always invalidated by any other change
-	delete_transient( 'wpseo_sitemap_cache_1' );
-	delete_transient( 'wpseo_sitemap_cache_' . $type );
+	// Always delete the main index sitemaps cache, as that's always invalidated by any other change.
+	delete_transient( 'wpseo_sitemap_cache_1_1' );
+	delete_transient( 'wpseo_sitemap_cache_' . $type . '_1' );
 
 	WPSEO_Utils::clear_sitemap_cache( array( $type ) );
 }
@@ -342,8 +322,8 @@ add_action( 'deleted_term_relationships', 'wpseo_invalidate_sitemap_cache' );
 /**
  * Invalidate XML sitemap cache for taxonomy / term actions
  *
- * @param unsigned $unused
- * @param string   $type
+ * @param int    $unused Unused term ID value.
+ * @param string $type   Taxonomy to invalidate.
  */
 function wpseo_invalidate_sitemap_cache_terms( $unused, $type ) {
 	wpseo_invalidate_sitemap_cache( $type );
@@ -356,7 +336,7 @@ add_action( 'clean_object_term_cache', 'wpseo_invalidate_sitemap_cache_terms', 1
 /**
  * Invalidate the XML sitemap cache for a post type when publishing or updating a post
  *
- * @param int $post_id
+ * @param int $post_id Post ID to determine post type for invalidation.
  */
 function wpseo_invalidate_sitemap_cache_on_save_post( $post_id ) {
 
@@ -381,7 +361,7 @@ add_action( 'save_post', 'wpseo_invalidate_sitemap_cache_on_save_post' );
 if ( ! extension_loaded( 'ctype' ) || ! function_exists( 'ctype_digit' ) ) {
 
 	/**
-	 * @param string $string
+	 * @param string $string String input to validate.
 	 *
 	 * @return bool
 	 */
@@ -395,6 +375,28 @@ if ( ! extension_loaded( 'ctype' ) || ! function_exists( 'ctype_digit' ) ) {
 	}
 }
 
+/**
+ * Makes sure the taxonomy meta is updated when a taxonomy term is split.
+ *
+ * @link https://make.wordpress.org/core/2015/02/16/taxonomy-term-splitting-in-4-2-a-developer-guide/ Article explaining the taxonomy term splitting in WP 4.2.
+ *
+ * @param string $old_term_id      Old term id of the taxonomy term that was splitted.
+ * @param string $new_term_id      New term id of the taxonomy term that was splitted.
+ * @param string $term_taxonomy_id Term taxonomy id for the taxonomy that was affected.
+ * @param string $taxonomy         The taxonomy that the taxonomy term was splitted for.
+ */
+function wpseo_split_shared_term( $old_term_id, $new_term_id, $term_taxonomy_id, $taxonomy ) {
+	$tax_meta = get_option( 'wpseo_taxonomy_meta', array() );
+
+	if ( ! empty( $tax_meta[ $taxonomy ][ $old_term_id ] ) ) {
+		$tax_meta[ $taxonomy ][ $new_term_id ] = $tax_meta[ $taxonomy ][ $old_term_id ];
+		unset( $tax_meta[ $taxonomy ][ $old_term_id ] );
+		update_option( 'wpseo_taxonomy_meta', $tax_meta );
+	}
+}
+
+add_action( 'split_shared_term', 'wpseo_split_shared_term', 10, 4 );
+
 
 /********************** DEPRECATED FUNCTIONS **********************/
 
@@ -406,8 +408,8 @@ if ( ! extension_loaded( 'ctype' ) || ! function_exists( 'ctype_digit' ) ) {
  * @deprecated use WPSEO_Meta::get_value()
  * @see        WPSEO_Meta::get_value()
  *
- * @param    string $val    internal name of the value to get
- * @param    int    $postid post ID of the post to get the value for
+ * @param    string $val    Internal name of the value to get.
+ * @param    int    $postid Post ID of the post to get the value for.
  *
  * @return    string
  */
@@ -425,9 +427,9 @@ function wpseo_get_value( $val, $postid = 0 ) {
  * @deprecated use WPSEO_Meta::set_value() or just use update_post_meta()
  * @see        WPSEO_Meta::set_value()
  *
- * @param    string $meta_key   the meta to change
- * @param    mixed  $meta_value the value to set the meta to
- * @param    int    $post_id    the ID of the post to change the meta for.
+ * @param    string $meta_key   The meta to change.
+ * @param    mixed  $meta_value The value to set the meta to.
+ * @param    int    $post_id    The ID of the post to change the meta for.
  *
  * @return    bool    whether the value was changed
  */
@@ -478,7 +480,7 @@ function get_wpseo_options() {
  * @see        WPSEO_Meta::replace_meta()
  *
  * @param string $old_metakey The old name of the meta value.
- * @param string $new_metakey The new name of the meta value, usually the WP SEO name.
+ * @param string $new_metakey The new name of the meta value, usually the Yoast SEO name.
  * @param bool   $replace     Whether to replace or to copy the values.
  */
 function replace_meta( $old_metakey, $new_metakey, $replace = false ) {
@@ -494,9 +496,9 @@ function replace_meta( $old_metakey, $new_metakey, $replace = false ) {
  * @deprecated use WPSEO_Taxonomy_Meta::get_term_meta()
  * @see        WPSEO_Taxonomy_Meta::get_term_meta()
  *
- * @param string|object $term     term to get the meta value for
- * @param string        $taxonomy name of the taxonomy to which the term is attached
- * @param string        $meta     meta value to get
+ * @param string|object $term     Term to get the meta value for.
+ * @param string        $taxonomy Name of the taxonomy to which the term is attached.
+ * @param string        $meta     Meta value to get.
  *
  * @return bool|mixed value when the meta exists, false when it does not
  */
@@ -539,15 +541,15 @@ function wpseo_get_terms( $id, $taxonomy, $return_single = false ) {
  * Generate an HTML sitemap
  *
  * @deprecated 1.5.5.4
- * @deprecated use plugin WordPress SEO Premium
- * @see        WordPress SEO Premium
+ * @deprecated use plugin Yoast SEO Premium
+ * @see        Yoast SEO Premium
  *
  * @param array $atts The attributes passed to the shortcode.
  *
  * @return string
  */
 function wpseo_sitemap_handler( $atts ) {
-	_deprecated_function( __FUNCTION__, 'WPSEO 1.5.5.4', 'Functionality has been discontinued after being in beta, it\'ll be available in the WordPress SEO Premium plugin soon.' );
+	_deprecated_function( __FUNCTION__, 'WPSEO 1.5.5.4', 'Functionality has been discontinued after being in beta, it\'ll be available in the Yoast SEO Premium plugin soon.' );
 
 	return '';
 }
@@ -561,7 +563,7 @@ add_shortcode( 'wpseo_sitemap', 'wpseo_sitemap_handler' );
  * @deprecated use WPSEO_Utils::strip_shortcode()
  * @see        WPSEO_Utils::strip_shortcode()
  *
- * @param string $text input string that might contain shortcodes
+ * @param string $text Input string that might contain shortcodes.
  *
  * @return string $text string without shortcodes
  */
@@ -573,6 +575,7 @@ function wpseo_strip_shortcode( $text ) {
 
 /**
  * Do simple reliable math calculations without the risk of wrong results
+ *
  * @see        http://floating-point-gui.de/
  * @see        the big red warning on http://php.net/language.types.float.php
  *
@@ -584,9 +587,9 @@ function wpseo_strip_shortcode( $text ) {
  *
  * @since      1.5.0
  *
- * @param    mixed  $number1   Scalar (string/int/float/bool)
+ * @param    mixed  $number1   Scalar (string/int/float/bool).
  * @param    string $action    Calculation action to execute.
- * @param    mixed  $number2   Scalar (string/int/float/bool)
+ * @param    mixed  $number2   Scalar (string/int/float/bool).
  * @param    bool   $round     Whether or not to round the result. Defaults to false.
  * @param    int    $decimals  Decimals for rounding operation. Defaults to 0.
  * @param    int    $precision Calculation precision. Defaults to 10.
@@ -652,7 +655,7 @@ function wpseo_get_roles() {
  * @deprecated use WPSEO_Utils::is_url_relative()
  * @see        WPSEO_Utils::is_url_relative()
  *
- * @param string $url
+ * @param string $url URL input to check.
  *
  * @return bool
  */
@@ -671,7 +674,7 @@ function wpseo_is_url_relative( $url ) {
  *
  * @since      1.6.0
  *
- * @param string $string
+ * @param string $string String input to standardize.
  *
  * @return string
  */

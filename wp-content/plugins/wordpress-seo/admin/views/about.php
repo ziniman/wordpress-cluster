@@ -12,12 +12,12 @@ if ( ! defined( 'WPSEO_VERSION' ) ) {
 /**
  * Display a list of contributors
  *
- * @param array $contributors
+ * @param array $contributors Contributors' data, associative by GitHub username.
  */
 function wpseo_display_contributors( $contributors ) {
 	foreach ( $contributors as $username => $dev ) {
 		echo '<li class="wp-person" id="wp-person-', $username, '">';
-		echo '<a href="https://github.com/', $username, '"><img	src="https://secure.gravatar.com/avatar/', $dev->gravatar, '?s=60" class="gravatar" alt="', $dev->name, '"></a>';
+		echo '<a href="https://github.com/', $username, '"><img	src="//gravatar.com/avatar/', $dev->gravatar, '?s=60" class="gravatar" alt="', $dev->name, '"></a>';
 		echo '<a class="web" href="https://github.com/', $username, '">', $dev->name, '</a>';
 		echo '<span class="title">', $dev->role, '</span></li>';
 	}
@@ -27,152 +27,129 @@ function wpseo_display_contributors( $contributors ) {
 
 <div class="wrap about-wrap">
 
-	<h1><?php _e( 'Thank you for updating WordPress SEO by Yoast!', 'wordpress-seo' ); ?></h1>
+	<h1><?php
+		/* translators: %1$s expands to Yoast SEO */
+		printf( __( 'Thank you for updating %1$s!', 'wordpress-seo' ), 'Yoast SEO' );
+		?></h1>
 
-	<div class="about-text">
-		<?php _e( 'On your way to better search rankings!', 'wordpress-seo' ); ?><br/>
-		<br/>
-		<?php _e( 'WordPress SEO by Yoast 2.0 helps you optimize your site by making you ready for Google\'s Knowledge Graph and simplifying the WordPress SEO by Yoast admin.', 'wordpress-seo' ); ?>
-	</div>
+	<p class="about-text">
+		Yoast SEO 3.1 has, next to tons of bugfixes, 4 sections of "major" changes: an improved snippet editor, a
+		primary category feature, an overhauled admin section and (in Premium), an improved redirects feature.
+	</p>
+
+	<div class="wp-badge"></div>
 
 	<h2 class="nav-tab-wrapper" id="wpseo-tabs">
 		<a class="nav-tab" href="#top#new" id="new-tab">
 			<?php
-			/* translators: %s: '2.0' version number */
-			echo sprintf( __( 'What’s New In %s', 'wordpress-seo' ), '2.0' );
+			/* translators: %s: '3.0' version number */
+			echo sprintf( __( 'What’s new in %s', 'wordpress-seo' ), '3.1' );
 			?>
 		</a>
-		<a class="nav-tab" href="#top#v21" id="v21-tab">2.1</a>
+		<a class="nav-tab" href="#top#integrations"
+		   id="integrations-tab"><?php _e( 'Integrations', 'wordpress-seo' ); ?></a>
 		<a class="nav-tab" href="#top#credits" id="credits-tab"><?php _e( 'Credits', 'wordpress-seo' ); ?></a>
 	</h2>
 
 	<div id="new" class="wpseotab">
-		<div class="changelog headline-feature">
-			<h2><?php _e( 'Simplified Admin Menus', 'wordpress-seo' ); ?></h2>
 
-			<div class="feature-section">
-				<div class="col">
-					<h3><?php _e( 'We’ve merged several menu items to make the most important settings stand out more.', 'wordpress-seo' ); ?></h3>
+		<h2>Release video and post</h2>
+		<p>In <a href="https://yoast.com/yoast-seo-3-1/">this post</a>, Joost explains the features of Yoast SEO 3.1. If
+			you're more of a video type, check the release video below:</p>
 
-					<p><?php _e( 'Not all settings are created equal. Some require their own admin page and really need your attention. Others are more advanced and don’t need changing by everyone. This release helps you by focusing on what’s important.', 'wordpress-seo' ); ?></p>
+		<div class="headline-feature feature-video">
+			<?php // @codingStandardsIgnoreStart ?>
+			<iframe style="width:1050px;height:591px;" src="https://www.youtube.com/embed/Qt1yGL_spW4?rel=0&vq=hd720"
+			        frameborder="0" allowfullscreen></iframe>
+			<?php // @codingStandardsIgnoreEnd ?>
+		</div>
 
-					<p><?php printf( esc_html__( 'Several settings were moved to the %1$sAdvanced page%2$s, the bulk editor, file editor and import & export tools were all moved to the %3$sTools page%2$s.', 'wordpress-seo' ), '<a href="' . admin_url( 'admin.php?page=wpseo_advanced' ) . '">', '</a>', '<a href="' . admin_url( 'admin.php?page=wpseo_tools' ) . '">' ); ?></p>
+		<div class="feature-section two-col">
+			<div class="col">
+				<div class="media-container">
+					<img style="height: 350px; margin: 0 0 10px 0;"
+					     src="//yoast-30.s3.amazonaws.com/snippet-editor-new.png" alt="Snippet editor">
 				</div>
-				<div class="col">
-					<img class="aligncenter" src="http://uploads.yoast.nl/seo-menu_1A752658.png">
+				<h3>An improved snippet editor</h3>
+
+				<p>All of the user feedback on Yoast SEO 3.0 has made us improve on the snippet editor some more. This
+					is
+					what it looks like now!</p>
+			</div>
+			<div class="col">
+				<div class="media-container">
+					<img style="height: 350px; margin: 0 0 10px 0;" src="//yoast-30.s3.amazonaws.com/admin-toggles.png"
+					     alt="Admin overhaul">
 				</div>
+				<h3>Admin overhaul</h3>
+
+				<p>We had checboxes that enabled things and checkboxes that disabled things. That's, of course,
+					completely unusable. So now we have toggles. Everywhere.</p>
+			</div>
+			<div class="col">
+				<div class="media-containerr">
+					<img style="height: 225px; margin: 0 0 10px 0;"
+					     src="//yoast-30.s3.amazonaws.com/primary-category.png" alt="Primary category">
+				</div>
+				<h3>Primary category</h3>
+
+				<p>If you've ever been annoyed by a breadcrumb showing the wrong category: this one's for you!</p>
+			</div>
+			<div class="col">
+				<div class="media-container">
+					<img style="height: 225px; margin: 0 0 10px 0;" src="//yoast-30.s3.amazonaws.com/redirect.png"
+					     alt="Redirects overhaul">
+				</div>
+				<h3>Redirects improvements</h3>
+
+				<p>We've worked hard on making our Redirects feature in Yoast SEO Premium even better. Mostly by
+					improving our validation features, like preventing you from making infinite loops. But: we've also
+					added a neat inline editor, the option to do HTTP
+					451 statuses and more.</p>
 			</div>
 
 			<div class="clear"></div>
-		</div>
 
-		<hr>
-
-		<div class="changelog headline-feature dfw">
-			<h2><?php _e( 'Ready for Google’s Knowledge Graph', 'wordpress-seo' ); ?></h2>
-
-			<div class="feature-image">
-				<div class="dfw-container">
-					<img src="http://uploads.yoast.nl/knowledge-graph_1A752930.png"/>
-				</div>
-				<h3><?php _e( 'Knowledge Graph: We’ve got your back!', 'wordpress-seo' ); ?></h3>
-
-				<p>
-					<?php printf( __( 'Google recently rolled out changes that let you specify you or your companies name, social profiles and logo<sup>*</sup>, to use in their %1$sKnowledge Graph%2$s boxes.', 'wordpress-seo' ), '<a href="http://yoa.st/knowledgegraph">', '</a>' ); ?>
-					<?php printf( __( 'Decide whether you’re a company or a person and add the required info in the %1$sgeneral settings%2$s, then add your %3$ssocial profiles%2$s. We’ll do the rest.', 'wordpress-seo' ), '<a href="' . admin_url( 'admin.php?page=wpseo_dashboard#top#knowledge-graph' ) . '">', '</a>', '<a href="' . admin_url( 'admin.php?page=wpseo_social' ) . '">' ); ?>
-				</p>
-
-				<p><sup>*</sup>
-					<small><?php _e( 'Logo only works for companies.', 'wordpress-seo' ); ?></small>
-				</p>
+			<div class="return-to-dashboard">
+				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpseo_dashboard' ) ); ?>"><?php _e( 'Go to the General settings page →', 'wordpress-seo' ); ?></a>
 			</div>
+
 		</div>
-
-		<hr>
-
-		<div class="changelog feature-list finer-points">
-			<h2><?php _e( 'More in this release', 'wordpress-seo' ); ?></h2>
-
-			<div class="feature-section col two-col">
-				<div>
-					<span class="dashicons dashicons-twitter"></span>
-					<h4><?php _e( 'Twitter Galleries', 'wordpress-seo' ); ?></h4>
-					<h2>WordPress SEO 2.0.1</h2>
-					<p><small>Release date: April 1st, 2015</small></p>
-					<p>This update fixes a few small bugs:</p>
-					<ul class="ul-disc">
-						<li>Fixes an issue where (in rare cases) people upgrading to 2.0 got stuck in a redirect loop on their admin.</li>
-						<li>Fixes a broken link in the Dutch translation, causing the Pinterest tab on the Social settings page to overflow into the Google+ tab.</li>
-						<li>Fixes a small typo on the about page.</li>
-					</ul>
-					<p>
-						<?php printf( __( 'If you use galleries in your posts and have Twitter meta data enabled on %1$sSocial → Twitter%2$s, galleries will now be auto-detected and put out as Gallery Cards. All that’s left for your is to %3$sverify the cards with Twitter%2$s.', 'wordpress-seo' ), '<a href="' . admin_url( 'admin.php?page=wpseo_social#top#twitterbox' ) . '">', '</a>', '<a target="_blank" href="http://yoa.st/twittercardsverify">' ); ?>
-					</p>
-				</div>
-
-				<div class="last-feature">
-					<span class="dashicons dashicons-performance"></span>
-					<h4><?php _e( 'Performance Improvements', 'wordpress-seo' ); ?></h4>
-
-					<p>
-						<?php _e( 'This release has made the code of WordPress SEO by Yoast that runs on the frontend of your site approximately 30% faster.', 'wordpress-seo' ); ?>
-					</p>
-				</div>
-
-				<div>
-					<span class="dashicons dashicons-admin-generic"></span>
-					<h4><?php _e( 'Improved Settings Screens', 'wordpress-seo' ); ?> </h4>
-
-					<p>
-						<?php _e( 'All the settings screens have been updated to use exactly the same, tab-based, styling, making them much more comprehensible.', 'wordpress-seo' ); ?>
-					</p>
-				</div>
-
-				<div class="last-feature">
-					<span class="dashicons dashicons-translation"></span>
-					<h4><?php _e( 'More Translations', 'wordpress-seo' ); ?></h4>
-
-					<p>
-						<?php printf( __( 'WordPress SEO by Yoast ships, at time of release, with 26 translations, of which 10 are complete. That\'s a huge improvement from last time, and we\'re improving every week. Join us at %1$stranslate.yoast.com%2$s!', 'wordpress-seo' ), '<a target="_blank" href="https://translate.yoast.com/projects/wordpress-seo">', '</a>' ); ?>
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<hr>
-
-		<div class="return-to-dashboard">
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=wpseo_dashboard' ) ); ?>"><?php _e( 'Go to The General settings page →', 'wordpress-seo' ); ?></a>
-		</div>
-
 	</div>
 
-	<div id="v21" class="wpseotab">
-		<h2>WordPress SEO 2.1</h2>
-		<p><small>Release date: April 20th, 2015</small></p>
-		<p>WordPress SEO 2.1 adds some more features on top of this release. Read the release notes for more info.</p>
-		<ul class="ul-disc">
-			<li>See the <a href="https://wordpress.org/plugins/wordpress-seo/changelog/" target="_blank">changelog</a> for a complete list of changes.</li>
-			<li>Read our <a href="https://yoast.com/wordpress-seo-2-1-release-notes" target="_blank">release blogpost</a> for a more detailed explanation of the important changes in this release.</li>
-			<li>Read our <a href="https://yoast.com/coordinated-security-release/" target="_blank">security blogpost</a> for the backstory about a security fix that was included in this release, in coordination with a significant part of the WordPress community.</li>
-			<li>We've added support for Google's new URL representation in mobile search results. You can read more about it in <a href="https://yoast.com/changing-urls-in-search-results/" target="_blank">this blogpost</a>.</li>
-		</ul>
-		<h2>WordPress SEO 2.0.1</h2>
-		<p><small>Release date: April 1st, 2015</small></p>
-		<p>This update fixes a few small bugs:</p>
-		<ul class="ul-disc">
-			<li>Fixes an issue where (in rare cases) people upgrading to 2.0 got stuck in a redirect loop on their admin.</li>
-			<li>Fixes a broken link in the Dutch translation, causing the Pinterest tab on the Social settings page to overflow into the Google+ tab.</li>
-			<li>Fixes a small typo on the about page.</li>
-		</ul>
-	</div>
+	<div id="integrations" class="wpseotab">
+		<h2>Yoast SEO Integrations</h2>
+		<p class="about-description">
+			Yoast SEO 3.0 brought a way for theme builders and custom field plugins to integrate with Yoast SEO. These
+			integrations make sure that <em>all</em> the data on your page is used for the content analysis. On this
+			page, we highlight the frameworks that have nicely working integrations.
+		</p>
+
+		<ol>
+			<li><a target="_blank" href="https://wordpress.org/plugins/yoast-seo-acf-analysis/">Yoast ACF Integration</a> - an integration built by <a href="https://forsberg.ax">Marcus Forsberg</a> and Team Yoast</li>
+			<li><a target="_blank" href="https://www.elegantthemes.com/plugins/divi-builder/">Divi Builder</a></li>
+			<li><a target="_blank" href="https://vc.wpbakery.com/">Visual Composer</a></li>
+		</ol>
+
+		<h3>Other integrations</h3>
+		<p class="about-description">
+			We've got another integration we'd like to tell you about:
+		</p>
+
+		<ol>
+			<li><a target="_blank" href="https://wordpress.org/plugins/glue-for-yoast-seo-amp/">Glue for Yoast SEO &amp; AMP</a> - an integration between <a href="https://wordpress.org/plugins/amp/">the WordPress AMP plugin</a> and Yoast SEO.</li>
+		</ol>
+
+
+		</div>
 
 	<div id="credits" class="wpseotab">
 		<p class="about-description">
 			<?php
-				printf( __( 'While most of the development team is at %1$sYoast%2$s in the Netherlands, WordPress SEO by Yoast is created by a worldwide team.', 'wordpress-seo' ), '<a target="_blank" href="https://yoast.com/">', '</a>' );
-				echo ' ';
-				printf( __( 'Want to help us develop? Read our %1$scontribution guidelines%2$s!', 'wordpress-seo' ), '<a target="_blank" href="http://yoa.st/wpseocontributionguidelines">', '</a>' );
+			/* translators: %1$s and %2$s expands to anchor tags, %3$s expands to Yoast SEO */
+			printf( __( 'While most of the development team is at %1$sYoast%2$s in the Netherlands, %3$s is created by a worldwide team.', 'wordpress-seo' ), '<a target="_blank" href="https://yoast.com/">', '</a>', 'Yoast SEO' );
+			echo ' ';
+			printf( __( 'Want to help us develop? Read our %1$scontribution guidelines%2$s!', 'wordpress-seo' ), '<a target="_blank" href="http://yoa.st/wpseocontributionguidelines">', '</a>' );
 			?>
 		</p>
 
@@ -185,15 +162,15 @@ function wpseo_display_contributors( $contributors ) {
 					'role'     => __( 'Project Lead', 'wordpress-seo' ),
 					'gravatar' => 'f08c3c3253bf14b5616b4db53cea6b78',
 				),
-				'jrfnl'     => (object) array(
-					'name'     => 'Juliette Reinders Folmer',
-					'role'     => __( 'Lead Developer', 'wordpress-seo' ),
-					'gravatar' => 'cbbac3e529102364dc3b026af3cc2988',
-				),
 				'omarreiss' => (object) array(
 					'name'     => 'Omar Reiss',
-					'role'     => __( 'Lead Developer', 'wordpress-seo' ),
+					'role'     => __( 'Lead Architect', 'wordpress-seo' ),
 					'gravatar' => '86aaa606a1904e7e0cf9857a663c376e',
+				),
+				'atimmer'   => (object) array(
+					'name'     => 'Anton Timmermans',
+					'role'     => __( 'Architect', 'wordpress-seo' ),
+					'gravatar' => 'b3acbabfdd208ecbf950d864b86fe968',
 				),
 				'tacoverdo' => (object) array(
 					'name'     => 'Taco Verdonschot',
@@ -214,21 +191,47 @@ function wpseo_display_contributors( $contributors ) {
 					'role'     => __( 'Developer', 'wordpress-seo' ),
 					'gravatar' => 'a9b43e766915b48031eab78f9916ca8e',
 				),
-				'petervw'       => (object) array(
-					'name'     => 'Peter van Wilderen',
+				'terw-dan'      => (object) array(
+					'name'     => 'Danny Terwindt',
 					'role'     => __( 'Developer', 'wordpress-seo' ),
-					'gravatar' => 'e4662ebd4b59d3c196e2ba721d8a1efc',
-				),
-				'rarst'         => (object) array(
-					'name'     => 'Andrey Savchenko',
-					'role'     => __( 'Developer', 'wordpress-seo' ),
-					'gravatar' => 'ab89ce39f47b327f1c85e4019e865a71',
+					'gravatar' => '20a04b0736e630e80ce2dbefe3f1d62f',
 				),
 				'CarolineGeven' => (object) array(
 					'name'     => 'Caroline Geven',
 					'role'     => __( 'Developer', 'wordpress-seo' ),
 					'gravatar' => 'f2596a568c3974e35f051266a63d791f',
 				),
+				'jcomack'       => (object) array(
+					'name'     => 'Jimmy Comack',
+					'role'     => __( 'Developer', 'wordpress-seo' ),
+					'gravatar' => '41073ef9e1f3e01b03cbee75cee33bd4',
+				),
+				'moorscode'     => (object) array(
+					'name'     => 'Jip Moors',
+					'role'     => __( 'Developer', 'wordpress-seo' ),
+					'gravatar' => '1751c5afc377ef4ec07a50791db1bc52',
+				),
+				'rarst'         => (object) array(
+					'name'     => 'Andrey Savchenko',
+					'role'     => __( 'Developer', 'wordpress-seo' ),
+					'gravatar' => 'c445c2491f9f55409b2e4dccee357961',
+				),
+				'boblinthorst'  => (object) array(
+					'name'     => 'Bob Linthorst',
+					'role'     => __( 'Tester / Developer', 'wordpress-seo' ),
+					'gravatar' => '8063b1955f54681ef3a2deb21972faa1',
+				),
+				'diedexx'       => (object) array(
+					'name'     => 'Diede Exterkate',
+					'role'     => __( 'Tester / Developer', 'wordpress-seo' ),
+					'gravatar' => '59908788f406037240ee011388db29f8',
+				),
+				'jrfnl'         => (object) array(
+					'name'     => 'Juliette Reinders Folmer',
+					'role'     => __( 'Developer', 'wordpress-seo' ),
+					'gravatar' => 'cbbac3e529102364dc3b026af3cc2988',
+				),
+
 			);
 
 			wpseo_display_contributors( $contributors );
@@ -237,13 +240,15 @@ function wpseo_display_contributors( $contributors ) {
 		<h4 class="wp-people-group"><?php _e( 'Contributors to this release', 'wordpress-seo' ); ?></h4>
 		<?php
 		$patches_from = array(
-			'Jack Neary'             => 'https://github.com/xeeeveee',
-			'Koen Van den Wijngaert' => 'https://github.com/vdwijngaert',
-			'Ezra Pool'              => 'https://github.com/Zae',
-			'Andy Sozot'             => 'https://github.com/sozot',
+			'Chris Jean' => 'https://github.com/chrisbliss18',
+			'Melvin Tercan' => 'https://github.com/melvinmt',
+			'Ben Constable' => 'https://github.com/BenConstable',
+			'Emre Erkan' => 'https://github.com/karalamalar',
 		);
 		?>
-		<p><?php _e( 'We\'re always grateful for patches from non-regular contributors, this release, patches from the following people made it in:', 'wordpress-seo' ); ?></p>
+		<p>We're always grateful for patches from non-regular contributors, in Yoast SEO 3.1, patches from
+			the
+			following people made it in:</p>
 		<ul class="ul-square">
 			<?php
 			foreach ( $patches_from as $patcher => $link ) {

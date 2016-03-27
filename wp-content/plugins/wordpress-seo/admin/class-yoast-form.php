@@ -26,7 +26,7 @@ class Yoast_Form {
 	/**
 	 * Get the singleton instance of this class
 	 *
-	 * @return object
+	 * @return Yoast_Form
 	 */
 	public static function get_instance() {
 		if ( ! ( self::$instance instanceof self ) ) {
@@ -42,7 +42,7 @@ class Yoast_Form {
 	 * @param bool   $form             Whether or not the form start tag should be included.
 	 * @param string $option           The short name of the option to use for the current page.
 	 * @param bool   $contains_files   Whether the form should allow for file uploads.
-	 * @param bool   $option_long_name
+	 * @param bool   $option_long_name Group name of the option.
 	 */
 	public function admin_header( $form = true, $option = 'wpseo', $contains_files = false, $option_long_name = false ) {
 		if ( ! $option_long_name ) {
@@ -58,7 +58,7 @@ class Yoast_Form {
 		 */
 		require_once( ABSPATH . 'wp-admin/options-head.php' );
 		?>
-		<h2 id="wpseo-title"><?php echo esc_html( get_admin_page_title() ); ?></h2>
+		<h1 id="wpseo-title"><?php echo esc_html( get_admin_page_title() ); ?></h1>
 		<div class="wpseo_content_wrapper">
 		<div class="wpseo_content_cell" id="wpseo_content_top">
 		<?php
@@ -73,7 +73,7 @@ class Yoast_Form {
 	/**
 	 * Set the option used in output for form elements
 	 *
-	 * @param string $option_name
+	 * @param string $option_name Option key.
 	 */
 	public function set_option( $option_name ) {
 		$this->option_name = $option_name;
@@ -99,7 +99,7 @@ class Yoast_Form {
 	 * Generates the footer for admin pages
 	 *
 	 * @param bool $submit       Whether or not a submit button and form end tag should be shown.
-	 * @param bool $show_sidebar Whether or not to show the banner sidebar - used by premium plugins to disable it
+	 * @param bool $show_sidebar Whether or not to show the banner sidebar - used by premium plugins to disable it.
 	 */
 	public function admin_footer( $submit = true, $show_sidebar = true ) {
 		if ( $submit ) {
@@ -148,7 +148,7 @@ class Yoast_Form {
 	 */
 	public function admin_sidebar() {
 
-		// No banners in Premium
+		// No banners in Premium.
 		if ( class_exists( 'WPSEO_Product_Premium' ) ) {
 			$license_manager = new Yoast_Plugin_License_Manager( new WPSEO_Product_Premium() );
 			if ( $license_manager->license_is_valid() ) {
@@ -162,13 +162,23 @@ class Yoast_Form {
 				'img' => 'banner-website-review.png',
 				'alt' => 'Website Review banner',
 			),
+			array(
+				'url' => 'https://yoast.com/academy/course/basic-seo-training/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=basic-seo-training-banner',
+				'img' => 'banner-basic-seo-training.png',
+				'alt' => 'Basic SEO Training banner',
+			),
+			array(
+				'url' => 'https://yoast.com/academy/course/yoast-seo-wordpress-training/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=yoast-seo-plugin-training-banner',
+				'img' => 'banner-yoast-seo-for-wordpress-training.png',
+				'alt' => 'Yoast SEO for WordPress Training banner',
+			),
 		);
 
 		$plugin_banners = array(
 			array(
 				'url' => 'https://yoast.com/wordpress/plugins/seo-premium/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=premium-seo-banner',
 				'img' => 'banner-premium-seo.png',
-				'alt' => 'Banner WordPress SEO Premium',
+				'alt' => 'Banner Yoast SEO Premium',
 			),
 		);
 
@@ -176,7 +186,7 @@ class Yoast_Form {
 			$plugin_banners[] = array(
 				'url' => 'https://yoast.com/wordpress/plugins/video-seo/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=video-seo-banner',
 				'img' => 'banner-video-seo.png',
-				'alt' => 'Banner WordPress SEO Video SEO extension',
+				'alt' => 'Banner Yoast Video SEO plugin',
 			);
 		}
 
@@ -184,7 +194,7 @@ class Yoast_Form {
 			$plugin_banners[] = array(
 				'url' => 'https://yoast.com/wordpress/plugins/yoast-woocommerce-seo/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=woocommerce-seo-banner',
 				'img' => 'banner-woocommerce-seo.png',
-				'alt' => 'Banner WooCommerce SEO plugin',
+				'alt' => 'Banner Yoast WooCommerce SEO plugin',
 			);
 		}
 
@@ -192,7 +202,7 @@ class Yoast_Form {
 			$plugin_banners[] = array(
 				'url' => 'https://yoast.com/wordpress/plugins/local-seo/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=local-seo-banner',
 				'img' => 'banner-local-seo.png',
-				'alt' => 'Banner Local SEO plugin',
+				'alt' => 'Banner Yoast Local SEO plugin',
 			);
 		}
 
@@ -200,7 +210,7 @@ class Yoast_Form {
 			$plugin_banners[] = array(
 				'url' => 'https://yoast.com/wordpress/plugins/news-seo/#utm_source=wordpress-seo-config&utm_medium=banner&utm_campaign=news-seo-banner',
 				'img' => 'banner-news-seo.png',
-				'alt' => 'Banner News SEO',
+				'alt' => 'Banner Yoast News SEO plugin',
 			);
 		}
 
@@ -220,12 +230,14 @@ class Yoast_Form {
 			if ( $i == 2 ) {
 				break;
 			}
-			echo '<a target="_blank" href="' . esc_url( $banner['url'] ) . '"><img width="261" src="' . plugins_url( 'images/' . $banner['img'], WPSEO_FILE ) . '" alt="' . esc_attr( $banner['alt'] ) . '"/></a><br/><br/>';
+			echo '<a target="_blank" href="' . esc_url( $banner['url'] ) . '"><img width="261" height="152" src="' . plugins_url( 'images/' . $banner['img'], WPSEO_FILE ) . '" alt="' . esc_attr( $banner['alt'] ) . '"/></a><br/><br/>';
 			$i ++;
 		}
 		?>
 				<strong><?php _e( 'Remove these ads?', 'wordpress-seo' ); ?></strong><br/>
-				<a target="_blank" href="https://yoast.com/wordpress/plugins/seo-premium/#utm_source=wordpress-seo-config&utm_medium=textlink&utm_campaign=remove-ads-link"><?php _e( 'Upgrade to WordPress SEO Premium &raquo;', 'wordpress-seo' ); ?></a><br/><br/>
+				<a target="_blank" href="https://yoast.com/wordpress/plugins/seo-premium/#utm_source=wordpress-seo-config&amp;utm_medium=textlink&amp;utm_campaign=remove-ads-link"><?php
+				 /* translators: %1$s expands to Yoast SEO Premium */
+				printf( __( 'Upgrade to %1$s &raquo;', 'wordpress-seo' ), 'Yoast SEO Premium' ); ?></a><br/><br/>
 			</div>
 		</div>
 	<?php
@@ -234,8 +246,8 @@ class Yoast_Form {
 	/**
 	 * Output a label element
 	 *
-	 * @param string $text
-	 * @param array  $attr
+	 * @param string $text Label text string.
+	 * @param array  $attr HTML attributes set.
 	 */
 	public function label( $text, $attr ) {
 		$attr = wp_parse_args( $attr, array(
@@ -287,11 +299,53 @@ class Yoast_Form {
 	}
 
 	/**
+	 * Create a light switch input field.
+	 *
+	 * @param string  $var        The variable within the option to create the checkbox for.
+	 * @param string  $label      The label to show for the variable.
+	 * @param array   $buttons    Array of two labels for the buttons (defaults Off/On).
+	 * @param boolean $reverse    Reverse order of buttons (default true).
+	 */
+	public function light_switch( $var, $label, $buttons = array(), $reverse = true ) {
+
+		if ( ! isset( $this->options[ $var ] ) ) {
+			$this->options[ $var ] = false;
+		}
+
+		if ( $this->options[ $var ] === true ) {
+			$this->options[ $var ] = 'on';
+		}
+
+		$class = 'switch-light switch-candy switch-yoast-seo';
+
+		if ( $reverse ) {
+			$class .= ' switch-yoast-seo-reverse';
+		}
+
+		if ( empty( $buttons ) ) {
+			$buttons = array( __( 'Disabled', 'wordpress-seo' ), __( 'Enabled', 'wordpress-seo' ) );
+		}
+
+		list( $off_button, $on_button ) = $buttons;
+
+		echo '<div class="switch-container">',
+		'<label class="', esc_attr( $class ), '" onclick="">',
+		'<input type="checkbox" id="', esc_attr( $var ), '" name="', esc_attr( $this->option_name ), '[', esc_attr( $var ), ']" value="on"', checked( $this->options[ $var ], 'on', false ), '/>',
+		"<h4>{$label}</h4>",
+		'<span aria-hidden="true">
+			<span>', esc_html( $off_button ) ,'</span>
+			<span>', esc_html( $on_button ) ,'</span>
+			<a></a>
+		 </span>
+		 </label><div class="clear"></div></div>';
+	}
+
+	/**
 	 * Create a Text input field.
 	 *
 	 * @param string       $var   The variable within the option to create the text input field for.
 	 * @param string       $label The label to show for the variable.
-	 * @param array|string $attr  Extra class to add to the input field
+	 * @param array|string $attr  Extra class to add to the input field.
 	 */
 	public function textinput( $var, $label, $attr = array() ) {
 		if ( ! is_array( $attr ) ) {
@@ -337,7 +391,7 @@ class Yoast_Form {
 	 * Create a hidden input field.
 	 *
 	 * @param string $var The variable within the option to create the hidden input for.
-	 * @param string $id  The ID of the element
+	 * @param string $id  The ID of the element.
 	 */
 	public function hidden( $var, $id = '' ) {
 		$val = ( isset( $this->options[ $var ] ) ) ? $this->options[ $var ] : '';
@@ -406,8 +460,8 @@ class Yoast_Form {
 	/**
 	 * Media input
 	 *
-	 * @param string $var
-	 * @param string $label
+	 * @param string $var   Option name.
+	 * @param string $label Label message.
 	 */
 	public function media_input( $var, $label ) {
 		$val = '';
@@ -452,5 +506,43 @@ class Yoast_Form {
 		}
 		echo '<div class="clear"></div>';
 		echo '</div><br/>';
+	}
+
+
+	/**
+	 * Create a toggle switch input field.
+	 *
+	 * @param string $var    The variable within the option to create the file upload field for.
+	 * @param array  $values The radio options to choose from.
+	 * @param string $label  The label to show for the variable.
+	 */
+	public function toggle_switch( $var, $values, $label ) {
+		if ( ! is_array( $values ) || $values === array() ) {
+			return;
+		}
+		if ( ! isset( $this->options[ $var ] ) ) {
+			$this->options[ $var ] = false;
+		}
+		if ( $this->options[ $var ] === true ) {
+			$this->options[ $var ] = 'on';
+		}
+		if ( $this->options[ $var ] === false ) {
+			$this->options[ $var ] = 'off';
+		}
+
+		$var_esc = esc_attr( $var );
+
+		echo '<div class="switch-container">';
+		echo '<fieldset id="', $var_esc, '" class="fieldset-switch-toggle" ><legend>', $label, '</legend>
+	<div class="switch-toggle switch-candy switch-yoast-seo">';
+
+		foreach ( $values as $key => $value ) {
+			$key_esc = esc_attr( $key );
+			$for     = $var_esc . '-' . $key_esc;
+			echo '<input type="radio" id="' . $for . '" name="' . esc_attr( $this->option_name ) . '[' . $var_esc . ']" value="' . $key_esc . '" ' . checked( $this->options[ $var ], $key_esc, false ) . ' />',
+			'<label for="', $for, '" onclick="">', $value, '</label>';
+		}
+
+		echo '<a></a></div></fieldset><div class="clear"></div></div>' . "\n\n";
 	}
 }

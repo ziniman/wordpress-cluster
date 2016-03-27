@@ -4,7 +4,7 @@
  */
 
 /**
- * class WPSEO_Export
+ * Class WPSEO_Export
  *
  * Class with functionality to export the WP SEO settings
  */
@@ -67,7 +67,8 @@ class WPSEO_Export {
 		}
 		else {
 			$results['status'] = 'failure';
-			$results['msg']    = __( 'Error creating WordPress SEO export: ', 'wordpress-seo' ) . $this->error;
+			/* translators: %1$s expands to Yoast SEO */
+			$results['msg']    = sprintf( __( 'Error creating %1$s export: ', 'wordpress-seo' ), 'Yoast SEO' ) . $this->error;
 		}
 
 		return $results;
@@ -107,7 +108,8 @@ class WPSEO_Export {
 	 * Writes the header of the export file.
 	 */
 	private function export_header() {
-		$this->write_line( '; ' . __( 'This is a settings export file for the WordPress SEO plugin by Yoast.com', 'wordpress-seo' ) . ' - https://yoast.com/wordpress/plugins/seo/' );
+		/* translators: %1$s expands to Yoast SEO */
+		$this->write_line( '; ' . sprintf( __( 'This is a settings export file for the %1$s plugin by Yoast.com', 'wordpress-seo' ), 'Yoast SEO' ) . ' - https://yoast.com/wordpress/plugins/seo/' );
 		if ( $this->include_taxonomy ) {
 			$this->write_line( '; ' . __( 'This export includes taxonomy metadata', 'wordpress-seo' ) );
 		}
@@ -116,8 +118,8 @@ class WPSEO_Export {
 	/**
 	 * Writes a line to the export
 	 *
-	 * @param string  $line
-	 * @param boolean $newline_first
+	 * @param string  $line          Line string.
+	 * @param boolean $newline_first Boolean flag whether to prepend with new line.
 	 */
 	private function write_line( $line, $newline_first = false ) {
 		if ( $newline_first ) {
@@ -129,7 +131,7 @@ class WPSEO_Export {
 	/**
 	 * Writes an entire option group to the export
 	 *
-	 * @param string $opt_group
+	 * @param string $opt_group Option group name.
 	 */
 	private function write_opt_group( $opt_group ) {
 		$this->write_line( '[' . $opt_group . ']', true );
@@ -155,8 +157,8 @@ class WPSEO_Export {
 	/**
 	 * Writes a settings line to the export
 	 *
-	 * @param string $key
-	 * @param string $val
+	 * @param string $key Key string.
+	 * @param string $val Value string.
 	 */
 	private function write_setting( $key, $val ) {
 		if ( is_string( $val ) ) {
@@ -173,7 +175,7 @@ class WPSEO_Export {
 			$taxonomy_meta = get_option( 'wpseo_taxonomy_meta' );
 			if ( is_array( $taxonomy_meta ) ) {
 				$this->write_line( '[wpseo_taxonomy_meta]', true );
-				$this->write_setting( 'wpseo_taxonomy_meta', urlencode( json_encode( $taxonomy_meta ) ) );
+				$this->write_setting( 'wpseo_taxonomy_meta', urlencode( WPSEO_Utils::json_encode( $taxonomy_meta ) ) );
 			}
 			else {
 				$this->write_line( '; ' . __( 'No taxonomy metadata found', 'wordpress-seo' ), true );
@@ -218,5 +220,4 @@ class WPSEO_Export {
 
 		return true;
 	}
-
 }

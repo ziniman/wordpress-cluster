@@ -13,7 +13,7 @@ if ( ! defined( 'WPSEO_VERSION' ) ) {
  * @todo [JRF => testers] Extensively test the export & import of the (new) settings!
  * If that all works fine, getting testers to export before and after upgrade will make testing easier.
  *
- * @todo [Yoast] The import for the RSS Footer plugin checks for data already entered via WP SEO,
+ * @todo [Yoast] The import for the RSS Footer plugin checks for data already entered via Yoast SEO,
  * the other import routines should do that too.
  */
 
@@ -21,43 +21,52 @@ $yform = Yoast_Form::get_instance();
 
 $replace = false;
 
-if ( isset( $_POST['import'] ) || isset( $_GET['import'] ) ) {
+/**
+ * The import method is used to dermine if there should be something imported.
+ *
+ * In case of POST the user is on the Yoast SEO import page and in case of the GET the user sees a notice from
+ * Yoast SEO that we can import stuff for that plugin.
+ */
+if ( filter_input( INPUT_POST, 'import' ) || filter_input( INPUT_GET, 'import' ) ) {
 
 	check_admin_referer( 'wpseo-import' );
 
-	if ( isset( $_POST['wpseo']['deleteolddata'] ) && $_POST['wpseo']['deleteolddata'] == 'on' ) {
-		$replace = true;
-	}
+	$post_wpseo = filter_input( INPUT_POST, 'wpseo', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+	$replace    = ( ! empty( $post_wpseo['deleteolddata'] ) && $post_wpseo['deleteolddata'] === 'on' );
 
-	if ( isset( $_POST['wpseo']['importwoo'] ) ) {
+	if ( ! empty( $post_wpseo['importwoo'] ) ) {
 		$import = new WPSEO_Import_WooThemes_SEO( $replace );
 	}
 
-	if ( isset( $_POST['wpseo']['importaioseo'] ) || isset( $_GET['importaioseo'] ) ) {
+	if ( ! empty( $post_wpseo['importaioseo'] )  || filter_input( INPUT_GET, 'importaioseo' ) ) {
 		$import = new WPSEO_Import_AIOSEO( $replace );
 	}
 
-	if ( isset( $_POST['wpseo']['importheadspace'] ) ) {
+	if ( ! empty( $post_wpseo['importheadspace'] ) ) {
 		$import = new WPSEO_Import_External( $replace );
 		$import->import_headspace();
 	}
 
-	if ( isset( $_POST['wpseo']['importrobotsmeta'] ) || isset( $_GET['importrobotsmeta'] ) ) {
+	if ( ! empty( $post_wpseo['importwpseo'] )  || filter_input( INPUT_GET, 'importwpseo' )  ) {
+		$import = new WPSEO_Import_WPSEO( $replace );
+	}
+
+	if ( ! empty( $post_wpseo['importrobotsmeta'] ) || filter_input( INPUT_GET, 'importrobotsmeta' ) ) {
 		$import = new WPSEO_Import_External( $replace );
 		$import->import_robots_meta();
 	}
 
-	if ( isset( $_POST['wpseo']['importrssfooter'] ) ) {
+	if ( ! empty( $post_wpseo['importrssfooter'] ) ) {
 		$import = new WPSEO_Import_External( $replace );
 		$import->import_rss_footer();
 	}
 
-	if ( isset( $_POST['wpseo']['importbreadcrumbs'] ) ) {
+	if ( ! empty( $post_wpseo['importbreadcrumbs'] ) ) {
 		$import = new WPSEO_Import_External( $replace );
 		$import->import_yoast_breadcrumbs();
 	}
 
-	// Allow custom import actions
+	// Allow custom import actions.
 	do_action( 'wpseo_handle_import' );
 
 }
@@ -75,7 +84,7 @@ if ( isset( $import ) ) {
 	 */
 	$msg = apply_filters( 'wpseo_import_message', $import->msg );
 
-	// Check if we've deleted old data and adjust message to match it
+	// Check if we've deleted old data and adjust message to match it.
 	if ( $replace ) {
 		$msg .= ' ' . __( 'The old data of the imported plugin was deleted successfully.', 'wordpress-seo' );
 	}
@@ -119,9 +128,15 @@ if ( isset( $import ) ) {
 </div>
 
 <div id="wpseo-export" class="wpseotab">
-	<p><?php _e( 'Export your WordPress SEO settings here, to import them again later or to import them on another site.', 'wordpress-seo' ); ?></p>
+	<p><?php
+		/* translators: %1$s expands to Yoast SEO */
+		printf( __( 'Export your %1$s settings here, to import them again later or to import them on another site.', 'wordpress-seo' ), 'Yoast SEO' );
+		?></p>
 	<?php $yform->checkbox( 'include_taxonomy_meta', __( 'Include Taxonomy Metadata', 'wordpress-seo' ) ); ?><br/>
-	<button class="button-primary" id="export-button">Export your WordPress SEO settings</button>
+	<button class="button-primary" id="export-button"><?php
+		/* translators: %1$s expands to Yoast SEO */
+		printf( __( 'Export your %1$s settings', 'wordpress-seo' ), 'Yoast SEO' );
+		?></button>
 	<script>
 		var wpseo_export_nonce = '<?php echo wp_create_nonce( 'wpseo-export' ); ?>';
 	</script>
@@ -140,6 +155,7 @@ if ( isset( $import ) ) {
 		$yform->checkbox( 'importheadspace', __( 'Import from HeadSpace2?', 'wordpress-seo' ) );
 		$yform->checkbox( 'importaioseo', __( 'Import from All-in-One SEO?', 'wordpress-seo' ) );
 		$yform->checkbox( 'importwoo', __( 'Import from WooThemes SEO framework?', 'wordpress-seo' ) );
+		$yform->checkbox( 'importwpseo', __( 'Import from wpSEO', 'wordpress-seo' ) );
 		?>
 		<br/>
 		<?php

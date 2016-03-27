@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <package xmlns="http://www.zend.com/server/deployment-descriptor/1.0" version="1.0">
     <name>wordpress-cluster</name>
-    <description>Update to AWS Plugin</description>
+    <description>Adding Server Name to Blog Title ALT tag</description>
     <version>
-        <release>4.1.0</release>
+        <release>4.1.2</release>
     </version>
     <appdir>data</appdir>
     <scriptsdir>scripts</scriptsdir>
